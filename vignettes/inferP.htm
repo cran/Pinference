@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Probability bounds of logical expressions</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Probability bounds of logical
+expressions</h1>
+
+
+
+<div id="introduction" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>The probability calculus is an extension of the calculus of
+propositional logic. Besides the <em>truth</em> or <em>falsity</em> of
+propositions, the probability calculus also considers a continuum of
+degrees of credibility – probabilities – between those two extremes.
+Just as propositional logic gives a set of rules to derive the truth or
+falsity of some propositions from the truth or falsity of others, so the
+probability calculus gives a set of rules to derive the probability for
+some propositions from the probability for others; these rules include
+the logical ones as a special case.</p>
+<p>There are different logical deduction systems (Pelletier &amp; Hazen
+2023), each with many dialects, to express the rules of propositional
+logic. One of them is the <a href="https://encyclopediaofmath.org/wiki/Sequent_calculus"><em>sequent
+calculus</em></a> (Takeuti 1987). The probability calculus has many
+analogies with the sequent calculus</p>
+<p>In sequent calculus we express that proposition <span class="math inline">\(a\)</span> is true within a set of axioms <span class="math inline">\(I\)</span> by the notation</p>
+<p><span class="math display">\[
+I \vdash a
+\]</span></p>
+<p>The same is expressed in the probability calculus by the notation
+(note the reflection)</p>
+<p><span class="math display">\[
+\mathrm{P}(a \:\vert\:\mathopen{} I) = 1
+\]</span></p>
+<p>but in this case we can also consider degrees of credibility
+different from <span class="math inline">\(1\)</span>.</p>
+<p>The theory of “random variables” is a particular application of the
+probability calculus: an expression such as “<span class="math inline">\(X\mathrel{\!=\!}x\)</span>” means “The quantity
+<span class="math inline">\(X\)</span> is measured to have value <span class="math inline">\(x\)</span>” – which is just a proposition. Also
+the “causal calculus” is a particular application: an expression such as
+“<span class="math inline">\(\mathrm{do}(X \mathrel{\!=\!}x)\)</span>”
+means “The quantity <span class="math inline">\(X\)</span> has been
+<em>set</em> equal to <span class="math inline">\(x\)</span>” – which is
+also just a proposition. In the probability calculus we can in fact even
+consider more general propositions, such as “The quantity <span class="math inline">\(X\)</span> has been <em>reported</em> to be equal
+to <span class="math inline">\(x\)</span>”.</p>
+<p><br />
+</p>
+<p>The view of the probability calculus as an extension of the logical
+calculus goes back at least to Boole, possibly to Laplace. For more
+information about the formalism and history see e.g. Hailperin 1996,
+Jaynes 2003, Jeffreys 1983, Johnson 1924, Johnson 1936.</p>
+</div>
+<div id="probabilistic-inferences" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Probabilistic
+inferences</h1>
+<p>In propositional logic, suppose we assert that:</p>
+<ul>
+<li>proposition <span class="math inline">\(a\)</span> is true given a
+set of axioms <span class="math inline">\(I\)</span>,</li>
+<li>proposition <span class="math inline">\(b \lor \lnot a\)</span> is
+true given the set of axioms <span class="math inline">\(I\)</span>
+augmented with the proposition <span class="math inline">\(c\)</span>.</li>
+</ul>
+<p>Then we can also assert that <span class="math inline">\(b\)</span>
+is true given the set of axioms <span class="math inline">\(c \land
+I\)</span>. This is a logical inference. In the notation of sequent
+calculus (Takeuti 1987) it is written as follows:</p>
+<p><span class="math display">\[
+\frac{
+I \vdash a \quad\quad c \land I \vdash b \lor \lnot a
+}{
+c \land I \vdash b
+}
+\]</span></p>
+<p>The conclusion follows from the initial assertions by the application
+of a set of inference rules.</p>
+<p>In the probability calculus the same inference can be expressed as
+follows:</p>
+<p><span class="math display">\[
+\frac{
+\mathrm{P}(a \:\vert\:\mathopen{} I) = 1\quad\quad \mathrm{P}(b \lor
+\lnot a \:\vert\:\mathopen{} c \land I) = 1
+}{
+\mathrm{P}(b \:\vert\:\mathopen{} c \land I) = 1
+}
+\]</span></p>
+<p>This final probability can be shown to follow from the initial ones
+by the well-known probability rules, valid for any sentences <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>:</p>
+<ul>
+<li><p><span class="math inline">\(\mathrm{P}(\lnot a
+\:\vert\:\mathopen{} I) = 1 - \mathrm{P}(a \:\vert\:\mathopen{}
+I)\)</span></p></li>
+<li><p><span class="math inline">\(\mathrm{P}(a \land b
+\:\vert\:\mathopen{} I) = \mathrm{P}(a \:\vert\:\mathopen{} b \land
+I)\cdot\mathrm{P}(b \:\vert\:\mathopen{} I)
+= \mathrm{P}(b \:\vert\:\mathopen{} a \land I)\cdot\mathrm{P}(a
+\:\vert\:\mathopen{} I)\)</span></p></li>
+<li><p><span class="math inline">\(\mathrm{P}(a \lor b
+\:\vert\:\mathopen{} I) = \mathrm{P}(a \:\vert\:\mathopen{} I) +
+\mathrm{P}(b \:\vert\:\mathopen{} I) - \mathrm{P}(a \land b
+\:\vert\:\mathopen{} I)\)</span></p></li>
+<li><p><span class="math inline">\(\mathrm{P}(a \:\vert\:\mathopen{} a
+\land I) = 1\)</span></p></li>
+</ul>
+<p>Another example of a simple probability inference, which immediately
+follows by the probability rules, is</p>
+<p><span class="math display">\[
+\frac{
+\mathrm{P}(a \:\vert\:\mathopen{} I) = 0.3\quad\quad \mathrm{P}(b
+\:\vert\:\mathopen{} a \land I) = 0.2
+}{
+\mathrm{P}(a \land b \:\vert\:\mathopen{} I) = 0.06
+}
+\]</span></p>
+<p><br />
+</p>
+<p>The probability rules effectively imply the rules of propositional
+logic as special cases.</p>
+<p>What’s remarkable is that <strong>the probability rules allow us to
+algorithmically determine the <em>lower</em> and <em>upper</em> values
+that a probability can have, under the assertion of the values of other
+probabilities</strong>. It is well-known, for instance, that if</p>
+<p><span class="math display">\[
+\mathrm{P}(a \:\vert\:\mathopen{} I) = 0.2\,,\quad
+\mathrm{P}(b \:\vert\:\mathopen{} I) = 0.7
+\]</span></p>
+<p>then the probability <span class="math inline">\(\mathrm{P}(a \land b
+\:\vert\:\mathopen{} I)\)</span> cannot be larger than the minimum of
+the two above, that is,</p>
+<p><span class="math display">\[
+\mathrm{P}(a \land b \:\vert\:\mathopen{} I) \in [0, 0.2]
+\]</span></p>
+<p>In fact this is also possible with inequality constraints. As a very
+trivial example, if the probability <span class="math inline">\(\mathrm{P}(a \:\vert\:\mathopen{} I) \le
+0.3\)</span>, then we must have <span class="math inline">\(\mathrm{P}(\lnot a \:\vert\:\mathopen{} I) \ge
+0.3\)</span>.</p>
+<p>Finding such bounds is equivalent to solving a linear-optimization
+problem. The most relevant texts about this equivalence are those by
+Hailperin 1965 and Hailperin 1996.</p>
+</div>
+<div id="the-function-inferp" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> The function
+<code>inferP()</code></h1>
+<p>The function <code>inferP()</code> finds the bounds of a target
+probability by implementing the linear-optimization algorithm mentioned
+in the previous section.</p>
+<p>As a first argument,<code>target =</code>, it takes the conditional
+probability of two logical expressions; as optional subsequent arguments
+it takes equality or inequality constraints about the conditional
+probabilities of other logical expressions.</p>
+<p>The main notation used in the function (corresponding to the default
+argument <code>solidus = TRUE</code>) parallels the mathematical
+notation used above, with the following differences:</p>
+<ul>
+<li>Not: <code>!</code> or <code>-</code></li>
+<li>And: <code>&amp;</code> or <code>&amp;&amp;</code> or
+<code>*</code></li>
+<li>Or: <code>+</code></li>
+<li>If-then: <code>&gt;</code> (“if <span class="math inline">\(a\)</span> then <span class="math inline">\(b\)</span>”, <code>a &gt; b</code>, is simply
+equivalent to <span class="math inline">\(b \lor \lnot a\)</span>)<br />
+</li>
+</ul>
+<p>If an additional argument <code>solidus = FALSE</code> is given in
+<code>inferP()</code>, then a notation is used that differs from the
+above in the conditional symbol and in the “or”-connective:</p>
+<ul>
+<li>Conditional solidus “<span class="math inline">\({}\:\vert\:\mathopen{}{}\)</span>”:
+<code>~</code></li>
+<li>Or: <code>+</code> or <code>|</code> or <code>||</code></li>
+</ul>
+<p>This alternative notation allows the user to use proper R syntax for
+the connectives (<code>!</code>, <code>&amp;</code>, <code>|</code>,
+<code>&amp;&amp;</code>, <code>||</code>), in case it were convenient to
+paste them from other R expressions.</p>
+<p>In the following examples the main notation is used.</p>
+<div id="simple-examples" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Simple examples</h2>
+<p>Load the package:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&#39;Pinference&#39;</span>)</span></code></pre></div>
+<p>Here are some examples, from more trivial to more complex.</p>
+<ul>
+<li>The probability for a sentence <span class="math inline">\(a\)</span> can a priori be anything between 0 and
+1:</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(a  <span class="sc">|</span>  I)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co"># min max </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#   0   1</span></span></code></pre></div>
+<p><br />
+</p>
+<ul>
+<li>But if we assume the truth of that sentence, then its probability
+must be 1:</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(a  <span class="sc">|</span>  a <span class="sc">&amp;</span> I)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># min max </span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#   1   1</span></span></code></pre></div>
+<p><br />
+</p>
+<ul>
+<li>If we assume the negation of that sentence, then its probability
+must be 0:</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(a  <span class="sc">|</span>  <span class="sc">!</span>a <span class="sc">&amp;</span> I)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co"># min max </span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#   0   0</span></span></code></pre></div>
+<p><br />
+</p>
+<ul>
+<li>A probability conditional on contradictory premises, such as <span class="math inline">\(b \land \lnot b\)</span>, is undefined:</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(a  <span class="sc">|</span>  b <span class="sc">&amp;</span> <span class="sc">!</span>b <span class="sc">&amp;</span> I)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co"># min max </span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#  NA  NA</span></span></code></pre></div>
+<p><br />
+</p>
+</div>
+<div id="examples-with-constraints" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Examples with
+constraints</h2>
+<ul>
+<li>This is a statement of the “and” or “multiplication” or
+“conjunction” rule:</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(a <span class="sc">&amp;</span> b  <span class="sc">|</span>  I),</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>    <span class="fu">P</span>(a  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="fl">0.2</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>    <span class="fu">P</span>(b  <span class="sc">|</span>  a <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fl">0.3</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#  min  max </span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co"># 0.06 0.06</span></span></code></pre></div>
+<ul>
+<li>The rule for “conditional probability”:</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(b  <span class="sc">|</span>  a <span class="sc">&amp;</span> I),</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>    <span class="fu">P</span>(a <span class="sc">&amp;</span> b  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="fl">0.06</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>    <span class="fu">P</span>(a  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="fl">0.2</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co"># min max </span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co"># 0.3 0.3</span></span></code></pre></div>
+<ul>
+<li>Same rule, but with an inequality constraint:</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(b  <span class="sc">|</span>  a <span class="sc">&amp;</span> I),</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>    <span class="fu">P</span>(a <span class="sc">&amp;</span> b  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="fl">0.06</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>    <span class="fu">P</span>(a  <span class="sc">|</span>  I) <span class="sc">&lt;=</span> <span class="fl">0.2</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>)</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co"># min max </span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co"># 0.3 1.0</span></span></code></pre></div>
+<ul>
+<li>If we assert that two sentences have the same probability, and the
+sentences are mutually exclusive and exhaustive, then each must have 0.5
+probability:</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(a  <span class="sc">|</span>  I),</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="fu">P</span>(a  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="fu">P</span>(b  <span class="sc">|</span>  I),</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>    <span class="fu">P</span>(a <span class="sc">&amp;</span> b  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>    <span class="fu">P</span>(a <span class="sc">+</span> b  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">1</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co"># min max </span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co"># 0.5 0.5</span></span></code></pre></div>
+<ul>
+<li>The logical rule of implication (<em>modus ponens</em>): if <span class="math inline">\(a\)</span> and <span class="math inline">\(a
+\Rightarrow b\)</span> are true, then <span class="math inline">\(b\)</span> is true:</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(b  <span class="sc">|</span>  I),</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="fu">P</span>(a  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>    <span class="fu">P</span>(a <span class="sc">&gt;</span> b  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">1</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co"># min max </span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#   1   1</span></span></code></pre></div>
+<ul>
+<li>Under a false proposition, any implication is always true:</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(a <span class="sc">&gt;</span> b  <span class="sc">|</span>  I),</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>    <span class="fu">P</span>(a  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">0</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co"># min max </span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#   1   1</span></span></code></pre></div>
+<ul>
+<li>A variant of the <a href="https://ncatlab.org/nlab/show/cut+rule/">cut rule</a> of sequent
+calculus:</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(X <span class="sc">+</span> Y <span class="sc">|</span> I <span class="sc">&amp;</span> J),</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>    <span class="fu">P</span>(A <span class="sc">&amp;</span> X <span class="sc">|</span> I) <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>    <span class="fu">P</span>(Y <span class="sc">|</span> A <span class="sc">&amp;</span> J) <span class="sc">==</span> <span class="dv">1</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co"># min max </span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#   1   1</span></span></code></pre></div>
+<p><br />
+</p>
+</div>
+<div id="combining-evidence" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Combining
+evidence</h2>
+<p>Suppose that hypothesis <span class="math inline">\(H\)</span> has
+probability 0.7 given evidence <span class="math inline">\(E_1\)</span>,
+and probability 0.8 given evidence <span class="math inline">\(E_2\)</span>. What is its probability if two
+pieces of evidence are combined, that is, given their conjunction? An
+interesting result, proven in Hailperin 2006, is that such probability
+can be anything:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(H  <span class="sc">|</span>  E1 <span class="sc">&amp;</span> E2 <span class="sc">&amp;</span> I),</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>    <span class="fu">P</span>(H  <span class="sc">|</span>  E1 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fl">0.7</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>    <span class="fu">P</span>(H  <span class="sc">|</span>  E2 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fl">0.8</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co"># min max </span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#   0   1</span></span></code></pre></div>
+</div>
+</div>
+<div id="the-monty-hall-problem" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> The Monty Hall
+problem</h1>
+<p>The “Monty Hall problem”, inspired by the TV show <em>Let’s make a
+deal!</em> hosted by Monty Hall, was proposed in the <em>Parade</em>
+magazine in 1990 (see Lo Bello 1991). the numbers of the doors are
+changed here):</p>
+<blockquote>
+<p>Suppose you are on a game show and given a choice of three doors.
+Behind one is a car; behind the others are goats. You pick door No. 1,
+and the host, who knows what is behind them and wouldn’t open the door
+with the car, opens No. 3, which has a goat. He then asks if you want to
+pick No. 2. Should you switch?</p>
+</blockquote>
+<p>We can solve this problem with <code>inferP()</code>.</p>
+<div id="propositions" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Propositions</h2>
+<p>First let’s introduce some notation for the relevant
+propositions:</p>
+<ul>
+<li><code>I</code>: a proposition expressing the rules of the game,</li>
+<li><code>car1</code>: “The car is behind door No. 1”,</li>
+<li><code>you1</code>: “You pick door No. 1”,</li>
+<li><code>host1</code>: “The host opens door No. 1”,</li>
+</ul>
+<p>and similarly for the other doors.</p>
+</div>
+<div id="target-probability" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Target
+probability</h2>
+<p>We want to know what’s the probability that the car is behind the
+other door, No. 2.</p>
+<p>The conditional of the target probability has, besides the game rules
+<span class="math inline">\(I\)</span>, three propositions expressing
+the information we have: you chose door No. 1, <code>you1</code>, the
+host opened door No. 3, <code>host3</code>, and there is no car behind
+door No. 3, <code>!car3</code>.</p>
+<p>The target probability is thus
+<code>P(car2  |  you1 &amp; host3 &amp; !car3 &amp; I)</code></p>
+</div>
+<div id="given-probabilities" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Given
+probabilities</h2>
+<p>We must express the information we have and the game rules in terms
+of probabilities. Note that there are several equivalent ways to express
+the probabilistic constraints listed below.</p>
+<ol style="list-style-type: decimal">
+<li><p>We know that there is only one car, and it must be behind one
+door. This corresponds to four probability constraints:<br />
+<code>P(car1 &amp; car2  |  I) == 0</code><br />
+<code>P(car1 &amp; car3  |  I) == 0</code><br />
+<code>P(car2 &amp; car3  |  I) == 0</code><br />
+<code>P(car1 + car2 + car3  |  I) == 1</code><br />
+</p></li>
+<li><p>The host must open one door, and only one door. But the host
+cannot open the door you chose, and cannot open the door that has the
+car, but must open one door. This corresponds to seven probability
+constraints:<br />
+<code>P(host1 &amp; host2  |  I) == 0</code><br />
+<code>P(host1 &amp; host3 |  I) == 0</code><br />
+<code>P(host2 &amp; host3  |  I) == 0</code><br />
+<code>P(host1 + host2 + host3  |  I) == 1</code><br />
+<code>P(host1  |  you1 &amp; I) == 0</code><br />
+<code>P(host2  |  car2 &amp; I) == 0</code><br />
+<code>P(host3  |  car3 &amp; I) == 0</code><br />
+<br />
+</p></li>
+<li><p>Let’s say that you are initially equally undecided among the
+three doors:<br />
+<code>P(car1  |  I) == P(car2  |  I)</code><br />
+<code>P(car2  |  I) == P(car3  |  I)</code><br />
+<br />
+</p></li>
+<li><p>The fact, alone, that you picked door No. 1 is irrelevant to the
+knowledge about the car’s position:<br />
+<code>P(car1  |  you1 &amp; I) == P(car2  |  you1 &amp; I)</code><br />
+<code>P(car2  |  you1 &amp; I) == P(car3  |  you1 &amp; I)</code><br />
+<br />
+</p></li>
+<li><p>Finally, we have no reason to believe that the host favours one
+door over another, when a choice is possible, that is, when the car is
+behind the door you chose:<br />
+<code>P(host2  |  you1 &amp; car1 &amp; I) == P(host3  |  you1 &amp; car1 &amp; I)</code><br />
+</p></li>
+</ol>
+</div>
+<div id="result" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> Result</h2>
+<p>We can finally input the desired target and the constraints into
+<code>inferP()</code>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(car2  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> host3 <span class="sc">&amp;</span> <span class="sc">!</span>car3 <span class="sc">&amp;</span> I),</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>    <span class="fu">P</span>(car1 <span class="sc">&amp;</span> car2  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>    <span class="fu">P</span>(car1 <span class="sc">&amp;</span> car3  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>    <span class="fu">P</span>(car2 <span class="sc">&amp;</span> car3  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>    <span class="fu">P</span>(car1 <span class="sc">+</span> car2 <span class="sc">+</span> car3  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>    <span class="fu">P</span>(host1 <span class="sc">&amp;</span> host2 <span class="sc">|</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>    <span class="fu">P</span>(host1 <span class="sc">&amp;</span> host3 <span class="sc">|</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>    <span class="fu">P</span>(host2 <span class="sc">&amp;</span> host3 <span class="sc">|</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>    <span class="fu">P</span>(host1 <span class="sc">+</span> host2 <span class="sc">+</span> host3  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>    <span class="fu">P</span>(host1  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>    <span class="fu">P</span>(host2  <span class="sc">|</span>  car2 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>    <span class="fu">P</span>(host3  <span class="sc">|</span>  car3 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a>    <span class="fu">P</span>(car1  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="fu">P</span>(car2  <span class="sc">|</span>  I),</span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a>    <span class="fu">P</span>(car2  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="fu">P</span>(car3  <span class="sc">|</span>  I),</span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a>    <span class="fu">P</span>(car1  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fu">P</span>(car2  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I),</span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a>    <span class="fu">P</span>(car2  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fu">P</span>(car3  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I),</span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a>    <span class="fu">P</span>(host2  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> car1 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fu">P</span>(host3  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> car1 <span class="sc">&amp;</span> I)</span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a>)</span>
+<span id="cb14-25"><a href="#cb14-25" tabindex="-1"></a><span class="co">#      min      max </span></span>
+<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a><span class="co"># 0.666667 0.666667</span></span></code></pre></div>
+<p>The well-known result is 2/3. You can also check the obvious result
+for <code>car3</code>, which is 0.</p>
+</div>
+<div id="omitting-some-probability-constraints" class="section level2" number="4.5">
+<h2><span class="header-section-number">4.5</span> Omitting some
+probability constraints</h2>
+<p>It is interesting to see what happens to the bounds of the target
+probability when some constraints are omitted. Suppose for instance that
+we omit the constraint<br />
+<code>P(host2  |  you1 &amp; car1 &amp; I) == P(host3  |  you1 &amp; car1 &amp; I)</code><br />
+which states that we have no reason to believe the host would choose
+door No. 2 more than No. 3 or vice versa, when the car is behind door
+No. 1. The bounds of the target probability become</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>    <span class="at">target =</span> <span class="fu">P</span>(car2  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> host3 <span class="sc">&amp;</span> <span class="sc">!</span>car3 <span class="sc">&amp;</span> I),</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>    <span class="fu">P</span>(car1 <span class="sc">&amp;</span> car2  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>    <span class="fu">P</span>(car1 <span class="sc">&amp;</span> car3  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>    <span class="fu">P</span>(car2 <span class="sc">&amp;</span> car3  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>    <span class="fu">P</span>(car1 <span class="sc">+</span> car2 <span class="sc">+</span> car3  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>    <span class="fu">P</span>(host1 <span class="sc">&amp;</span> host2 <span class="sc">|</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>    <span class="fu">P</span>(host1 <span class="sc">&amp;</span> host3 <span class="sc">|</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>    <span class="fu">P</span>(host2 <span class="sc">&amp;</span> host3 <span class="sc">|</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>    <span class="fu">P</span>(host1 <span class="sc">+</span> host2 <span class="sc">+</span> host3  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a>    <span class="fu">P</span>(host1  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a>    <span class="fu">P</span>(host2  <span class="sc">|</span>  car2 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a>    <span class="fu">P</span>(host3  <span class="sc">|</span>  car3 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a>    <span class="fu">P</span>(car1  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="fu">P</span>(car2  <span class="sc">|</span>  I),</span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a>    <span class="fu">P</span>(car2  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="fu">P</span>(car3  <span class="sc">|</span>  I),</span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a>    <span class="fu">P</span>(car1  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fu">P</span>(car2  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I),</span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a>    <span class="fu">P</span>(car2  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fu">P</span>(car3  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I)</span>
+<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb15-23"><a href="#cb15-23" tabindex="-1"></a>    <span class="do">## P(host2  |  you1 &amp; car1 &amp; I) == P(host3  |  you1 &amp; car1 &amp; I) # omitted</span></span>
+<span id="cb15-24"><a href="#cb15-24" tabindex="-1"></a>)</span>
+<span id="cb15-25"><a href="#cb15-25" tabindex="-1"></a><span class="co"># min max </span></span>
+<span id="cb15-26"><a href="#cb15-26" tabindex="-1"></a><span class="co"># 0.5 1.0</span></span></code></pre></div>
+<p>In this case the constraints do not determine a single value for the
+probability that the car is behind door No. 2, but they still constrain
+it to be more than 1/2. The conclusion is that it is still best to
+switch door (if you want the car), but the credibility of winning is not
+2/3.</p>
+</div>
+<div id="variations" class="section level2" number="4.6">
+<h2><span class="header-section-number">4.6</span> Variations</h2>
+<p>The internet offers many variations of the Monty Hall problem. They
+can also be solved with <code>inferP()</code>.</p>
+<p>Let’s take a “Monty Fall” variation as an example. There is the
+possibility that the host falls while going to open a door. We represent
+this with the proposition <code>fall</code>.</p>
+<p>If the hosts falls, there is a non-zero probability, let’s say 10%,
+that the host will open the door with the car after you choose door
+No. 1. We can express this by the constraints<br />
+<code>P(host2  |  car2 &amp; fall &amp; you1 &amp; I) == 0.1</code><br />
+<code>P(host3  |  car3 &amp; fall &amp; you1 &amp; I) == 0.1</code></p>
+<p>Finally we still have no reason to believe that the falling host
+favours one door over another, when the car is behind the door you
+chose:<br />
+<code>P(host2  |  you1 &amp; car1 &amp; fall &amp; I) == P(host3  |  you1 &amp; car1 &amp; fall &amp; I)</code></p>
+<p>The target probability is for the car being behind door No. 2, given
+that you chose No. 1, the host fell and opened No. 3, but there was no
+car there:<br />
+<code>P(car2  |  you1 &amp; host3 &amp; !car3 &amp; fall &amp; I)</code>.</p>
+<p>The result is</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">inferP</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>   <span class="at">target =</span> <span class="fu">P</span>(car2  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> host3 <span class="sc">&amp;</span> <span class="sc">!</span>car3 <span class="sc">&amp;</span> fall <span class="sc">&amp;</span> I),</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>    <span class="fu">P</span>(car1 <span class="sc">&amp;</span> car2  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>    <span class="fu">P</span>(car1 <span class="sc">&amp;</span> car3  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>    <span class="fu">P</span>(car2 <span class="sc">&amp;</span> car3  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>    <span class="fu">P</span>(car1 <span class="sc">+</span> car2 <span class="sc">+</span> car3  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>    <span class="fu">P</span>(host1 <span class="sc">&amp;</span> host2 <span class="sc">|</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>    <span class="fu">P</span>(host1 <span class="sc">&amp;</span> host3 <span class="sc">|</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>    <span class="fu">P</span>(host2 <span class="sc">&amp;</span> host3 <span class="sc">|</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>    <span class="fu">P</span>(host1 <span class="sc">+</span> host2 <span class="sc">+</span> host3  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>    <span class="fu">P</span>(host1  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>    <span class="fu">P</span>(host2  <span class="sc">|</span>  car2 <span class="sc">&amp;</span> fall <span class="sc">&amp;</span> you1 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fl">0.1</span>,</span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>    <span class="fu">P</span>(host3  <span class="sc">|</span>  car3 <span class="sc">&amp;</span> fall <span class="sc">&amp;</span> you1 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fl">0.1</span>,</span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>    <span class="fu">P</span>(car1  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="fu">P</span>(car2  <span class="sc">|</span>  I),</span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>    <span class="fu">P</span>(car2  <span class="sc">|</span>  I) <span class="sc">==</span> <span class="fu">P</span>(car3  <span class="sc">|</span>  I),</span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a>    <span class="fu">P</span>(car1  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fu">P</span>(car2  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I),</span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a>    <span class="fu">P</span>(car2  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fu">P</span>(car3  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> I),</span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a>    <span class="fu">P</span>(car1  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> fall <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fu">P</span>(car2  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> fall <span class="sc">&amp;</span> I),</span>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a>    <span class="fu">P</span>(car2  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> fall <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fu">P</span>(car3  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> fall <span class="sc">&amp;</span> I),</span>
+<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb16-25"><a href="#cb16-25" tabindex="-1"></a>    <span class="fu">P</span>(host2  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> car1 <span class="sc">&amp;</span> fall <span class="sc">&amp;</span> I) <span class="sc">==</span> <span class="fu">P</span>(host3  <span class="sc">|</span>  you1 <span class="sc">&amp;</span> car1 <span class="sc">&amp;</span> fall <span class="sc">&amp;</span> I)</span>
+<span id="cb16-26"><a href="#cb16-26" tabindex="-1"></a>)</span>
+<span id="cb16-27"><a href="#cb16-27" tabindex="-1"></a><span class="co">#      min      max </span></span>
+<span id="cb16-28"><a href="#cb16-28" tabindex="-1"></a><span class="co"># 0.642857 0.642857</span></span></code></pre></div>
+<p>roughly a 64% probability that the car is behind door No. 2. You can
+check that this probability becomes 50% if there’s a 50% probability
+that the falling host opens the door with the car.</p>
+<p>An interesting aspects of such variations is to precisely translate
+the different verbal information into formal propositions and their
+probability constraints.</p>
+</div>
+</div>
+<div id="references" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> References</h1>
+<p>Jaynes (2003): <em>Probability Theory: The Logic of Science</em>
+(Cambridge University Press) <a href="doi:10.1017/CBO9780511790423" class="uri">doi:10.1017/CBO9780511790423</a>.</p>
+<p>Jeffreys (1983): <em>Theory of Probability</em> (3rd ed. Oxford
+University Press) <a href="doi:10.1093/oso/9780198503682.001.0001" class="uri">doi:10.1093/oso/9780198503682.001.0001</a>.</p>
+<p>Johnson (1924): <em>Logic. Part III: The Logical Foundations of
+Science</em> (Cambridge University Press) <a href="https://archive.org/details/logic03john" class="uri">https://archive.org/details/logic03john</a>.</p>
+<p>Johnson (1932): <em>Probability: The Relations of Proposal to
+Supposal</em> (Mind 41(161):1) <a href="doi:10.1093/mind/XLI.161.1" class="uri">doi:10.1093/mind/XLI.161.1</a>.</p>
+<p>Hailperin (1965): <em>Best Possible Inequalities for the Probability
+of a Logical Function of Events</em> (Am. Math. Monthly 72(4):343) <a href="doi:10.1080/00029890.1965.11970533" class="uri">doi:10.1080/00029890.1965.11970533</a>.</p>
+<p>Hailperin (1996): <em>Sentential Probability Logic: Origins,
+Development, Current Status, and Technical Applications</em> (Associated
+University Presses) <a href="https://archive.org/details/hailperin1996-Sentential_probability_logic/" class="uri">https://archive.org/details/hailperin1996-Sentential_probability_logic/</a>.</p>
+<p>Hailperin (2006): <em>Probability logic and combining evidence</em>
+(Hist. Philos. Log. 27(3):249) <a href="doi:10.1080/01445340600616289" class="uri">doi:10.1080/01445340600616289</a>.</p>
+<p>Pelletier, Hazen 2023: <em>Natural Deduction Systems in Logic</em>
+(Stanford Encyclopedia of Philosophy) <a href="https://plato.stanford.edu/archives/spr2023/entries/natural-deduction/" class="uri">https://plato.stanford.edu/archives/spr2023/entries/natural-deduction/</a>.</p>
+<p>Takeuti (1987): <em>Proof Theory</em> (2nd ed. North-Holland).</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
