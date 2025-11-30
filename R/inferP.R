@@ -21,19 +21,28 @@
 #' `tomorrow it rains` # note the backticks
 #' ```
 #'
-#' Available logical connectives are "not" (negation, "\eqn{\lnot}"), "and" (conjunction, "\eqn{\land}"), "or" (disjunction, "\eqn{\lor}"), "if-then" (implication, "\eqn{\Rightarrow}"). The first three follow the standard R syntax for logical operators (see [base::logical]):
-#' - Not: ` !` or ` -`
-#' - And: ` & ` or ` && ` or ` * `
-#' - Or: ` + `; if argument `solidus = FALSE`, also ` || ` or ` | ` are allowed.
+#' Available logical connectives are "not" (negation, "\eqn{\lnot}"), "and" (conjunction, "\eqn{\land}"), "or" (disjunction, "\eqn{\lor}"), "if-then" (implication, "\eqn{\Rightarrow}") which internally is simply defined as "x or not-y". Two kinds of notation are available:
 #'
-#' The "if-then" connective is represented by the infix operator ` > `; internally `x > y` is simply defined as `x or not-y`.
+#' **Arithmetic notation**: should be used with argument `solidus = TRUE`:
+#' - Not: ` -`
+#' - And: ` * `
+#' - Or: ` + `
+#' - If-then: ` > `
+#'
+#' **Logical notation** (see [base::logical]): should be used with the argument `solidus = FALSE`:
+#' - Not: ` ! `
+#' - And: ` & ` or ` && `
+#' - Or: ` | ` or ` || `
+#' - If-then: two-argument function `ifthen()`
+#'
+#' The two kinds of notation can actually be mixed (only ` | ` and ` || ` are not allowed if `solidus = TRUE`), but **beware** of very unusual connective precedence in that case; for example, `!a + b` is interpreted as `!(a + b)`. If you use mixed notation you should explicitly group with parentheses to ensure the desired connective precedence. A warning is issued when `!` is used for negation together with `+`, `*`, because the grouping is dangerously counter-intuitive in this case.
 #'
 #' Examples of logical expressions:
 #' ```
 #' a
 #' a & b
 #' (a + hypothesis1) & -A
-#' red.ball & ((a > !b) + c)
+#' red.ball & ((a > -b) + c)
 #' ```
 #'
 #' ### Probabilities of logical expressions
@@ -44,17 +53,14 @@
 #'     
 #' can be entered in the following ways, among others (extra spaces added just for clarity):
 #' ```
-#' P(!a + b  |  c & H)
-#' P(-a + b  |  c && H)
-#' P(!a + b  |  c * H)
+#' P(-a + b  |  c * H)
 #' ```
-#' or, if argument  `solidus = FALSE`, in the following ways:
+#' or, if argument  `solidus = FALSE`:
 #' ```
 #' P(!a | b  ~  c & H)
-#' P(-a + b  ~  c && H)
-#' P(!a || b  ~  c * H)
+#' P(!a || b  ~  c && H)
 #' ```
-#' It is also possible to use `p` or `Pr` or `pr` instead of `P`.
+#' It is also possible to use `Pr`, `p`, `pr`, `F`, `f`, `T` (for "truth"), or `t` instead of `P`.
 #'
 #' ## Probability constraints
 #'
@@ -80,8 +86,6 @@
 #'
 #' @returns A vector of `min` and `max` values for the target probability, or `NA` if the constraints are mutually contradictory. If `min` and `max` are `0` and `1` then the constraints do not restrict the target probability in any way.
 #'
-#' @import lpSolve
-#'
 #' @references
 #' T. Hailperin: *Best Possible Inequalities for the Probability of a Logical Function of Events*. Am. Math. Monthly 72(4):343, 1965 <doi:10.1080/00029890.1965.11970533>.
 #'
@@ -98,7 +102,7 @@
 #' ## Trivial example with inequality constraint
 #' inferP(
 #'   target = P(a | h),
-#'   P(!a | h) >= 0.2
+#'   P(-a | h) >= 0.2
 #' )
 #'
 #' #' ## The probability of an "and" is always less
@@ -153,23 +157,24 @@
 #'     P(host2  |  you1 & car1 & I) == P(host3  |  you1 & car1 & I)
 #' )
 #'
-#' @importFrom stats as.formula
 #' @export
+#' @import lpSolve
+#' @importFrom stats as.formula
 inferP <- function(target, ..., solidus = TRUE) {
-    ## Logical connectives
+    ## Logical connectives and checks
+    tocheck <- deparse(as.formula(substitute(~ alist(target, ...))))
     if(solidus){
         connectives <- list(
             `&` = .Primitive("&&"),
             `*` = .Primitive("&&"),
             `+` = .Primitive("||"),
             `-` = .Primitive("!"),
-            `>` = function(x, y){y || !x}
+            `>` = function(x, y){y || !x},
+            ifthen = function(x, y){y || !x}
         )
         bar <- '|'
         ## Check if "||" is used
-        if(!all( gregexpr(' || ',
-            deparse(as.formula(substitute(~ alist(target, ...)))),
-            fixed = TRUE)[[1]] == -1 )){
+        if(!all( gregexpr(' || ', tocheck, fixed = TRUE)[[1]] == -1 )){
             stop("When argument 'solidus = TRUE', use of '||' is not allowed")
             }
 
@@ -179,11 +184,21 @@ inferP <- function(target, ..., solidus = TRUE) {
             `*` = .Primitive("&&"),
             `+` = .Primitive("||"),
             `-` = .Primitive("!"),
-            `>` = function(x, y){y || !x}
+            `>` = function(x, y){y || !x},
+            ifthen = function(x, y){y || !x}
         )
         bar <- '~'
     }
     barmatch <- paste0(' ', bar, ' ')
+
+    ## Warn if '!' is mixed with arithmetic notation
+    if(!all( gregexpr('!', tocheck, fixed = TRUE)[[1]] == -1 ) && (
+           !all( gregexpr('+', tocheck, fixed = TRUE)[[1]] == -1 ) ||
+           !all( gregexpr('*', tocheck, fixed = TRUE)[[1]] == -1 ) ||
+           !all( gregexpr('>', tocheck, fixed = TRUE)[[1]] == -1 )
+           )){
+        warning("Keep in mind that '!' can behave in unexpected ways with '*' '+' '>'.")
+    }
 
     ## number of constraints
     nc <- length(substitute(alist(...)))
@@ -202,8 +217,11 @@ inferP <- function(target, ..., solidus = TRUE) {
 
     ## print(combos) # for debugging
 
-    ## Accepted probability (or truth) symbols
-    Psyms <- c('P', 'p', 'Pr', 'pr', 'T', 't')
+    ## function to check whether there's some probability symbol
+    checkP <- function(x){
+        ## class(try(eval(x), silent = TRUE)) == 'try-error'
+        deparse(x) %in% c('P', 'p', 'Pr', 'pr', 'T', 't', 'F', 'f')
+    }
     ## accepted relation symbols
     Esyms <- c('==', '<=', '>=', '<', '>')
 
@@ -218,7 +236,7 @@ inferP <- function(target, ..., solidus = TRUE) {
     ## Syntax check
     if(
         !(length(Tsupp) == 2) ||
-            !(deparse(Tsupp[[1]]) %in% Psyms) ||
+            !checkP(Tsupp[[1]]) ||
              length(gregexpr(barmatch, deparse(Tsupp), fixed = TRUE)[[1]]) > 1
     ) {
         stop('invalid target')
@@ -278,7 +296,7 @@ inferP <- function(target, ..., solidus = TRUE) {
         ## Syntax check
         if(
             !(length(left) == 2) ||
-                !(deparse(left[[1]]) %in% Psyms) ||
+                !checkP(left[[1]]) ||
                  length(gregexpr(barmatch, deparse(left), fixed = TRUE)[[1]]) > 1
         ) {
             stop('invalid left side in argument ', i)
@@ -297,7 +315,7 @@ inferP <- function(target, ..., solidus = TRUE) {
             if(length(right) == 2) {
                 ## right side is a probability
                 if(
-                    !(deparse(right[[1]]) %in% Psyms) ||
+                    !checkP(right[[1]]) ||
                         length(gregexpr(barmatch, deparse(right), fixed = TRUE)[[1]]) > 1
                 ) {
                     stop('invalid right side in argument ', i)
@@ -310,7 +328,7 @@ inferP <- function(target, ..., solidus = TRUE) {
             if(
                 !(deparse(right[[1]]) %in% c('*', '/')) ||
                     !(length(right[[2]]) == 2) ||
-                     !(deparse(right[[2]][[1]]) %in% Psyms)
+                     !checkP(right[[2]][[1]])
             ) {
                 stop('invalid right side in argument ', i)
             }

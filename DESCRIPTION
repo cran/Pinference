@@ -1,6 +1,6 @@
 Package: Pinference
 Title: Probability Inference for Propositional Logic
-Version: 0.2.5
+Version: 0.2.6
 Authors@R: c(
   person("PierGianLuca", "Porta Mana", ,
   "pgl@portamana.org", role = c("aut", "cre", "cph"),
@@ -17,9 +17,9 @@ URL: https://pglpm.github.io/Pinference/,
         https://github.com/pglpm/Pinference/
 Suggests: knitr, rmarkdown
 NeedsCompilation: no
-Packaged: 2025-09-29 20:20:42 UTC; pglpm
+Packaged: 2025-11-15 06:56:24 UTC; pglpm
 Author: PierGianLuca Porta Mana [aut, cre, cph] (ORCID:
     <https://orcid.org/0000-0002-6070-0784>)
 Maintainer: PierGianLuca Porta Mana <pgl@portamana.org>
 Repository: CRAN
-Date/Publication: 2025-10-06 08:00:24 UTC
+Date/Publication: 2025-11-30 16:40:26 UTC

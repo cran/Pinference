@@ -1,4 +1,7 @@
-# Pinference
+<!-- badges: start -->
+  [![CRAN status](https://www.r-pkg.org/badges/version/Pinference)](https://CRAN.R-project.org/package=Pinference)
+  <!-- badges: end -->
+  # Pinference: probability inference for propositional logic
 
 ## An explanation of what this package is about
 
@@ -114,7 +117,7 @@ min max
 Other example: the probability of a proposition based on contradictory premises ($b \land \lnot b$) is undefined:
 ```
 inferP(
-  target = P(a  |  b & !b)
+  target = P(a  |  b & -b)
 )
 
 min max
@@ -139,11 +142,14 @@ More information about notation and constraints is available in the help functio
 
 
 ## Installation
-The package can be installed with
+
+Dependencies: This package requires the [**lpSolve**](https://cran.r-project.org/package=lpSolve) package.
+
+
+This package can be installed from [CRAN](https://CRAN.R-project.org/package=Pinference) with `install.packages('Pinference')`.
+
+In case of a newer version not yet on CRAN, it can be installed with
 ```
 remotes::install_github('pglpm/Pinference')
 ```
-
-It requires the [**lpSolve**](https://cran.r-project.org/package=lpSolve) package.
-
 
